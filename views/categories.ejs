@@ -4,10 +4,13 @@
 <p>Browse our service opportunities by category:</p>
 
 <ul class="categories-list">
-  <li>Environmental</li>
-  <li>Educational</li>
-  <li>Community Service</li>
-  <li>Health and Wellness</li>
+  <% if (locals.categories && categories.length > 0) { %>
+    <% categories.forEach(category => { %>
+      <li><%= category.category_name %></li>
+    <% }) %>
+  <% } else { %>
+    <li>No categories available.</li>
+  <% } %>
 </ul>
 
 <%- include('partials/footer') %>
