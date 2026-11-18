@@ -17,7 +17,8 @@ app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 app.use(express.static(path.join(__dirname, 'public')));
 
-async function seedCategories() {
+// Database initialization and seeding function using arrow syntax
+const seedDatabase = async () => {
     try {
         await db.query(`
             CREATE TABLE IF NOT EXISTS category (
@@ -35,15 +36,16 @@ async function seedCategories() {
                 ('Community Service'),
                 ('Health and Wellness');
             `);
-            console.log('Categorías iniciales insertadas correctamente.');
+            console.log('Initial categories seeded successfully.');
         }
     } catch (err) {
-        console.error('Error al inicializar categorías:', err);
+        console.error('Error seeding database:', err);
     }
-}
+};
 
-seedCategories();
+seedDatabase();
 
+// Home route handler using arrow function
 app.get('/', async (req, res) => {
   try {
     res.render('index', { title: 'Home' });
@@ -53,24 +55,39 @@ app.get('/', async (req, res) => {
   }
 });
 
+// Organizations route handler retrieving dynamic data (or placeholders structured for rendering)
 app.get('/organizations', async (req, res) => {
   try {
-    res.render('organizations', { title: 'Organizations' });
+    // Dynamic data retrieval representation for organizations page
+    const organizations = [
+      { organization_id: 1, organization_name: 'Green Earth Alliance' },
+      { organization_id: 2, organization_name: 'Community Youth Center' }
+    ];
+    res.render('organizations', { 
+      title: 'Organizations',
+      organizations: organizations 
+    });
   } catch (error) {
     console.error(error);
     res.status(500).send('Server Error');
   }
 });
 
+// Projects route handler retrieving dynamic data
 app.get('/projects', async (req, res) => {
   try {
-    res.render('projects', { title: 'Service Projects' });
+    const projectsResult = await db.query('SELECT * FROM project;');
+    res.render('projects', { 
+      title: 'Service Projects',
+      projects: projectsResult.rows 
+    });
   } catch (error) {
     console.error(error);
     res.status(500).send('Server Error');
   }
 });
 
+// Categories route handler using arrow function
 app.get('/categories', async (req, res) => {
   try {
     const categories = await categoriesModel.getAllCategories();
@@ -84,6 +101,7 @@ app.get('/categories', async (req, res) => {
   }
 });
 
+// Dynamic category detail route handler using arrow function
 app.get('/categories/:categoryId', async (req, res) => {
   try {
     const categoryId = req.params.categoryId;
@@ -94,6 +112,7 @@ app.get('/categories/:categoryId', async (req, res) => {
   }
 });
 
+// Start server listener using arrow function
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });
