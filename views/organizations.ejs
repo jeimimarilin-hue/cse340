@@ -3,28 +3,22 @@
 <h2><%= title %></h2>
 <p>Explore the organizations we collaborate with:</p>
 
-<section class="org-card">
-  <img src="/images/icon9.webp" alt="Community Care Network Logo" class="org-logo">
-  <div>
-    <h3>Community Care Network</h3>
-    <p>Dedicated to supporting local communities through active engagement and outreach programs.</p>
-  </div>
-</section>
-
-<section class="org-card">
-  <img src="/images/icon12.webp" alt="Youth Education Initiative Logo" class="org-logo">
-  <div>
-    <h3>Youth Education Initiative</h3>
-    <p>Empowering young students with academic tutoring, resources, and mentorship opportunities.</p>
-  </div>
-</section>
-
-<section class="org-card">
-  <img src="/images/logo1.webp" alt="Green Earth Alliance Logo" class="org-logo">
-  <div>
-    <h3>Green Earth Alliance</h3>
-    <p>Fostering environmental sustainability through local clean-up drives and community workshops.</p>
-  </div>
-</section>
+<% if (locals.organizations && organizations.length > 0) { %>
+  <% organizations.forEach(org => { %>
+    <section class="org-card">
+      <% if (org.logo_url) { %>
+        <img src="<%= org.logo_url %>" alt="<%= org.organization_name %> Logo" class="org-logo">
+      <% } %>
+      <div>
+        <h3>
+          <a href="/organization/<%= org.organization_id %>"><%= org.organization_name %></a>
+        </h3>
+        <p><%= org.description %></p>
+      </div>
+    </section>
+  <% }) %>
+<% } else { %>
+  <p>No organizations available.</p>
+<% } %>
 
 <%- include('partials/footer') %>
